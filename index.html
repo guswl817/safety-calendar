@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>인천정각중학교 생활안전부 업무 캘린더</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Gmarket+Sans:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#0a1628; --navy-mid:#122040; --blue:#1a4fa0; --blue-light:#2563c4;
+  --accent:#e8b400; --accent-soft:#f5d66a; --red:#d93a3a; --green:#1c9c5e;
+  --gray-1:#f4f6fb; --gray-2:#e4e9f2; --gray-3:#b0bcd4; --gray-4:#6d7f9e;
+  --white:#ffffff; --text:#1a2540;
+  --radius:12px; --shadow:0 4px 24px rgba(10,22,40,.10); --shadow-lg:0 8px 40px rgba(10,22,40,.18);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--gray-1);color:var(--text);min-height:100vh;}
+
+/* LOGIN */
+#loginScreen{
+  position:fixed;inset:0;background:var(--navy);
+  display:flex;align-items:center;justify-content:center;z-index:999;
+}
+.login-card{
+  background:var(--white);border-radius:24px;padding:44px 40px 36px;
+  width:100%;max-width:400px;box-shadow:var(--shadow-lg);
+}
+.login-logo{display:flex;align-items:center;gap:10px;margin-bottom:28px;}
+.login-logo .badge{
+  background:var(--accent);color:var(--navy);
+  font-family:'Gmarket Sans',sans-serif;font-weight:700;font-size:11px;
+  padding:4px 10px;border-radius:6px;
+}
+.login-logo .title{font-family:'Gmarket Sans',sans-serif;font-size:16px;font-weight:700;color:var(--navy);}
+.login-heading{font-family:'Gmarket Sans',sans-serif;font-size:22px;font-weight:700;color:var(--navy);margin-bottom:6px;}
+.login-sub{font-size:13px;color:var(--gray-4);margin-bottom:28px;}
+.login-label{display:block;font-size:11px;font-weight:700;color:var(--gray-4);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;}
+.login-select-wrap{position:relative;margin-bottom:16px;}
+.login-select{
+  width:100%;padding:13px 16px;border:1.5px solid var(--gray-2);border-radius:12px;
+  font-family:'Noto Sans KR',sans-serif;font-size:15px;color:var(--text);
+  background:var(--gray-1);outline:none;appearance:none;cursor:pointer;transition:.2s;
+}
+.login-select:focus{border-color:var(--blue);background:var(--white);}
+.select-arrow{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--gray-4);pointer-events:none;font-size:12px;}
+.login-pw{
+  width:100%;padding:13px 16px;border:1.5px solid var(--gray-2);border-radius:12px;
+  font-family:'Noto Sans KR',sans-serif;font-size:15px;color:var(--text);
+  background:var(--gray-1);outline:none;margin-bottom:20px;transition:.2s;
+}
+.login-pw:focus{border-color:var(--blue);background:var(--white);}
+.login-btn{
+  width:100%;padding:14px;background:var(--navy);color:var(--white);
+  border:none;border-radius:12px;font-family:'Gmarket Sans',sans-serif;
+  font-size:15px;font-weight:700;cursor:pointer;transition:.2s;
+}
+.login-btn:hover{background:var(--blue);}
+.login-hint{margin-top:14px;font-size:12px;color:var(--gray-4);text-align:center;}
+.login-err{background:#fff0f0;color:var(--red);border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:14px;display:none;}
+
+/* HEADER */
+header{
+  background:var(--navy);padding:0 32px;
+  display:flex;align-items:center;justify-content:space-between;
+  height:64px;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(10,22,40,.25);
+}
+.header-left{display:flex;align-items:center;gap:14px;}
+.school-badge{background:var(--accent);color:var(--navy);font-family:'Gmarket Sans',sans-serif;font-weight:700;font-size:11px;padding:4px 10px;border-radius:6px;}
+.header-title{font-family:'Gmarket Sans',sans-serif;font-size:17px;font-weight:700;color:var(--white);}
+.header-title span{color:var(--accent-soft);}
+.header-right{display:flex;align-items:center;gap:10px;}
+.user-chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:20px;padding:6px 14px 6px 8px;}
+.user-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Gmarket Sans',sans-serif;font-weight:700;font-size:12px;flex-shrink:0;}
+.user-name{font-size:13px;font-weight:600;color:var(--white);}
+.logout-btn{background:rgba(255,255,255,.08);color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:500;cursor:pointer;transition:.2s;}
+.logout-btn:hover{background:rgba(255,255,255,.18);color:var(--white);}
+.today-btn{background:rgba(255,255,255,.1);color:var(--white);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:7px 16px;font-size:13px;font-weight:500;cursor:pointer;transition:.2s;}
+.today-btn:hover{background:rgba(255,255,255,.18);}
+.add-task-btn{background:var(--accent);color:var(--navy);border:none;border-radius:8px;padding:8px 18px;font-family:'Gmarket Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:.2s;display:flex;align-items:center;gap:6px;}
+.add-task-btn:hover{background:var(--accent-soft);transform:translateY(-1px);}
+
+/* LAYOUT */
+.main{display:grid;grid-template-columns:280px 1fr;min-height:calc(100vh - 64px);}
+.sidebar{background:var(--white);border-right:1px solid var(--gray-2);padding:24px 20px;display:flex;flex-direction:column;gap:24px;overflow-y:auto;}
+.mini-calendar{background:var(--gray-1);border-radius:var(--radius);padding:16px;}
+.mini-cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.mini-cal-title{font-family:'Gmarket Sans',sans-serif;font-size:14px;font-weight:700;color:var(--navy);}
+.mini-nav{background:none;border:none;color:var(--gray-4);cursor:pointer;font-size:16px;padding:2px 6px;border-radius:4px;transition:.2s;}
+.mini-nav:hover{color:var(--blue);}
+.mini-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
+.mini-day-label{text-align:center;font-size:10px;font-weight:700;color:var(--gray-4);padding:4px 0;}
+.mini-day-label:first-child{color:#d93a3a;} .mini-day-label:last-child{color:#2563c4;}
+.mini-day{text-align:center;padding:5px 2px;font-size:12px;border-radius:6px;cursor:pointer;transition:.15s;color:var(--text);}
+.mini-day:hover{background:var(--gray-2);}
+.mini-day.today{background:var(--blue);color:var(--white);font-weight:700;}
+.mini-day.selected{background:var(--accent);color:var(--navy);font-weight:700;}
+.mini-day.other-month{color:var(--gray-3);}
+.mini-day.has-task::after{content:'';display:block;width:4px;height:4px;background:var(--accent);border-radius:50%;margin:1px auto 0;}
+.mini-day.today.has-task::after{background:var(--white);}
+
+.section-title{font-family:'Gmarket Sans',sans-serif;font-size:12px;font-weight:700;color:var(--gray-4);letter-spacing:.08em;margin-bottom:10px;text-transform:uppercase;}
+.filter-chips{display:flex;flex-direction:column;gap:6px;}
+.filter-chip{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:500;transition:.15s;color:var(--text);}
+.filter-chip:hover{background:var(--gray-1);} .filter-chip.active{background:var(--gray-1);font-weight:700;}
+.chip-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.stat-box{background:var(--gray-1);border-radius:10px;padding:12px;text-align:center;}
+.stat-num{font-family:'Gmarket Sans',sans-serif;font-size:22px;font-weight:700;color:var(--navy);display:block;}
+.stat-label{font-size:11px;color:var(--gray-4);font-weight:500;}
+
+.content{padding:28px 32px;overflow-y:auto;}
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+.cal-nav{display:flex;align-items:center;gap:12px;}
+.cal-nav-btn{background:var(--white);border:1px solid var(--gray-2);border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--gray-4);transition:.2s;}
+.cal-nav-btn:hover{border-color:var(--blue);color:var(--blue);}
+.cal-month-title{font-family:'Gmarket Sans',sans-serif;font-size:22px;font-weight:700;color:var(--navy);}
+.view-tabs{display:flex;gap:4px;background:var(--gray-2);border-radius:10px;padding:4px;}
+.view-tab{padding:7px 16px;border-radius:7px;border:none;background:none;font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:500;cursor:pointer;color:var(--gray-4);transition:.2s;}
+.view-tab.active{background:var(--white);color:var(--navy);font-weight:700;box-shadow:0 2px 8px rgba(10,22,40,.08);}
+
+/* CALENDAR GRID */
+.month-grid{background:var(--white);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;}
+.day-labels{display:grid;grid-template-columns:repeat(7,1fr);background:var(--navy);}
+.day-label{text-align:center;padding:12px 8px;font-family:'Gmarket Sans',sans-serif;font-size:12px;font-weight:700;color:rgba(255,255,255,.6);}
+.day-label:first-child{color:#ff8080;} .day-label:last-child{color:#80b0ff;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);border-left:1px solid var(--gray-2);border-top:1px solid var(--gray-2);}
+.cal-cell{border-right:1px solid var(--gray-2);border-bottom:1px solid var(--gray-2);min-height:110px;padding:8px;transition:.15s;cursor:pointer;}
+.cal-cell:hover{background:#f8faff;}
+.cal-cell.other-month{background:#fafbfd;}
+.cal-cell.today{background:#eef3ff;}
+.cell-date{font-family:'Gmarket Sans',sans-serif;font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px;display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;}
+.cal-cell.today .cell-date{background:var(--blue);color:var(--white);}
+.cal-cell.other-month .cell-date{color:var(--gray-3);}
+.cell-date.sunday{color:var(--red);} .cell-date.saturday{color:var(--blue-light);}
+.cal-cell.today .cell-date.sunday,.cal-cell.today .cell-date.saturday{color:var(--white);}
+.task-pill{display:flex;align-items:center;gap:5px;padding:3px 7px;border-radius:5px;font-size:11px;font-weight:500;margin-bottom:3px;cursor:pointer;transition:.15s;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;position:relative;}
+.task-pill:hover{opacity:.8;}
+.task-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.task-pill.all-done{opacity:.5;text-decoration:line-through;}
+.task-pill .pill-prog{position:absolute;bottom:0;left:0;height:2px;background:currentColor;opacity:.35;transition:width .3s;}
+.more-tasks{font-size:11px;color:var(--gray-4);font-weight:500;padding:2px 4px;}
+
+/* MODALS */
+.modal-overlay{position:fixed;inset:0;background:rgba(10,22,40,.5);backdrop-filter:blur(3px);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .2s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{background:var(--white);border-radius:20px;width:100%;max-width:540px;box-shadow:var(--shadow-lg);transform:translateY(20px);transition:transform .25s;max-height:90vh;overflow-y:auto;}
+.modal-overlay.open .modal{transform:translateY(0);}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:24px 28px 0;margin-bottom:20px;}
+.modal-title{font-family:'Gmarket Sans',sans-serif;font-size:18px;font-weight:700;color:var(--navy);}
+.modal-close{width:32px;height:32px;border-radius:8px;border:1px solid var(--gray-2);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--gray-4);transition:.15s;}
+.modal-close:hover{background:var(--gray-1);color:var(--text);}
+.modal-body{padding:0 28px 28px;}
+.form-group{margin-bottom:16px;}
+.form-label{display:block;font-size:11px;font-weight:700;color:var(--gray-4);letter-spacing:.06em;text-transform:uppercase;margin-bottom:7px;}
+.form-input,.form-select,.form-textarea{width:100%;padding:11px 14px;border:1.5px solid var(--gray-2);border-radius:10px;font-family:'Noto Sans KR',sans-serif;font-size:14px;color:var(--text);background:var(--gray-1);transition:.2s;outline:none;}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--blue);background:var(--white);}
+.form-textarea{resize:vertical;min-height:72px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+
+/* TEACHER MULTI-CHECK */
+.teacher-checkboxes{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.teacher-check-item{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:9px;border:1.5px solid var(--gray-2);cursor:pointer;transition:.15s;background:var(--gray-1);}
+.teacher-check-item:hover{border-color:var(--blue-light);background:#f0f5ff;}
+.teacher-check-item.selected{border-color:var(--blue);background:#e8f0ff;}
+.teacher-check-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Gmarket Sans',sans-serif;font-weight:700;font-size:11px;flex-shrink:0;}
+.teacher-check-name{font-size:13px;font-weight:600;color:var(--text);flex:1;}
+.teacher-check-mark{margin-left:auto;width:18px;height:18px;border-radius:5px;border:1.5px solid var(--gray-3);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;transition:.15s;}
+.teacher-check-item.selected .teacher-check-mark{background:var(--blue);border-color:var(--blue);color:var(--white);}
+
+/* COLOR PICKER */
+.color-picker{display:flex;gap:8px;flex-wrap:wrap;}
+.color-opt{width:28px;height:28px;border-radius:8px;cursor:pointer;border:3px solid transparent;transition:.15s;}
+.color-opt:hover{transform:scale(1.15);}
+.color-opt.selected{border-color:var(--navy);}
+
+/* BUTTONS */
+.modal-actions{display:flex;gap:10px;margin-top:20px;}
+.btn-primary{flex:1;background:var(--navy);color:var(--white);border:none;border-radius:10px;padding:13px;font-family:'Gmarket Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:.2s;}
+.btn-primary:hover{background:var(--blue);}
+.btn-secondary{background:var(--gray-1);color:var(--text);border:1.5px solid var(--gray-2);border-radius:10px;padding:13px 20px;font-size:14px;font-weight:500;cursor:pointer;transition:.2s;}
+.btn-secondary:hover{background:var(--gray-2);}
+.btn-danger{background:#fff0f0;color:var(--red);border:1.5px solid #ffd4d4;border-radius:10px;padding:13px 20px;font-size:14px;font-weight:500;cursor:pointer;transition:.2s;}
+.btn-danger:hover{background:#ffe0e0;}
+
+/* DETAIL */
+.task-detail-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:16px;}
+.task-detail-color{width:14px;height:14px;border-radius:4px;flex-shrink:0;margin-top:5px;}
+.task-detail-title{font-family:'Gmarket Sans',sans-serif;font-size:20px;font-weight:700;color:var(--navy);line-height:1.3;}
+.detail-row{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--gray-2);align-items:flex-start;}
+.detail-icon{font-size:15px;width:20px;text-align:center;flex-shrink:0;margin-top:2px;}
+.detail-label{font-size:11px;font-weight:700;color:var(--gray-4);text-transform:uppercase;letter-spacing:.05em;min-width:72px;}
+.detail-value{font-size:14px;color:var(--text);font-weight:500;}
+
+/* PROGRESS */
+.progress-section{background:var(--gray-1);border-radius:12px;padding:14px 16px;margin-bottom:16px;}
+.progress-label{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.progress-text{font-size:13px;font-weight:700;color:var(--navy);}
+.progress-pct{font-family:'Gmarket Sans',sans-serif;font-size:14px;font-weight:700;color:var(--blue);}
+.progress-track{height:8px;background:var(--gray-2);border-radius:99px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:99px;background:var(--green);transition:width .4s;}
+.progress-fill.partial{background:var(--accent);}
+.progress-fill.zero{background:var(--gray-3);}
+
+/* ASSIGNEE ROWS */
+.assignee-list{display:flex;flex-direction:column;gap:8px;width:100%;}
+.assignee-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;border:1.5px solid var(--gray-2);background:var(--gray-1);}
+.assignee-row.is-done{border-color:#b2e8d0;background:#f0faf5;}
+.assignee-row.is-me{border-color:#c0d4f5;background:#eef3ff;}
+.assignee-row.is-me.is-done{border-color:#a0d8c0;background:#e6f7ef;}
+.assignee-avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Gmarket Sans',sans-serif;font-weight:700;font-size:12px;flex-shrink:0;}
+.assignee-name{font-size:14px;font-weight:600;color:var(--text);flex:1;}
+.assignee-done-badge{background:#e6f9f0;color:var(--green);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:700;}
+.assignee-pending-badge{background:var(--gray-2);color:var(--gray-4);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;}
+.my-check-btn{padding:6px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;border:none;transition:.2s;flex-shrink:0;font-family:'Gmarket Sans',sans-serif;}
+.my-check-btn.do{background:var(--green);color:var(--white);}
+.my-check-btn.do:hover{background:#178550;}
+.my-check-btn.undo{background:var(--gray-2);color:var(--gray-4);border:1.5px solid var(--gray-3);}
+.my-check-btn.undo:hover{background:#dde4f0;}
+
+/* LIST VIEW */
+.list-view{display:none;}
+.list-view.active{display:block;}
+.month-grid-wrap.hidden{display:none;}
+.list-group{margin-bottom:20px;}
+.list-group-title{font-family:'Gmarket Sans',sans-serif;font-size:12px;font-weight:700;color:var(--gray-4);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;padding-left:4px;}
+.list-task{background:var(--white);border-radius:12px;padding:14px 18px;margin-bottom:8px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow);cursor:pointer;transition:.2s;border:1.5px solid transparent;}
+.list-task:hover{border-color:var(--blue-light);transform:translateX(3px);}
+.list-task-color{width:4px;height:44px;border-radius:2px;flex-shrink:0;}
+.list-task-info{flex:1;min-width:0;}
+.list-task-title{font-weight:700;font-size:14px;color:var(--navy);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.list-task.all-done .list-task-title{text-decoration:line-through;color:var(--gray-4);}
+.list-task-meta{font-size:12px;color:var(--gray-4);display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.mini-avatars{display:flex;gap:3px;align-items:center;}
+.mini-av{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;border:2px solid var(--white);flex-shrink:0;font-family:'Gmarket Sans',sans-serif;}
+.mini-av.checked{opacity:1;}
+.mini-av.unchecked{opacity:.35;}
+.list-pct{font-family:'Gmarket Sans',sans-serif;font-size:12px;font-weight:700;flex-shrink:0;}
+.list-pct.full{color:var(--green);}
+.list-pct.part{color:var(--accent);}
+.list-pct.zero{color:var(--gray-4);}
+
+/* TOAST */
+.toast{position:fixed;bottom:32px;right:32px;background:var(--navy);color:var(--white);padding:14px 22px;border-radius:12px;font-size:14px;font-weight:500;box-shadow:var(--shadow-lg);z-index:999;transform:translateY(20px);opacity:0;transition:.3s;pointer-events:none;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.success{border-left:4px solid var(--green);}
+.toast.error{border-left:4px solid var(--red);}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">
+      <span class="badge">인천정각중학교</span>
+      <span class="title">생활안전부</span>
+    </div>
+    <div class="login-heading">안녕하세요 👋</div>
+    <div class="login-sub">선생님 이름을 선택하고 비밀번호를 입력해주세요.</div>
+    <div id="loginErr" class="login-err"></div>
+    <label class="login-label">선생님 선택</label>
+    <div class="login-select-wrap">
+      <select class="login-select" id="loginName"></select>
+      <span class="select-arrow">▼</span>
+    </div>
+    <label class="login-label">비밀번호</label>
+    <input type="password" class="login-pw" id="loginPw" placeholder="비밀번호 입력" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">로그인</button>
+    <div class="login-hint">※ 공유 캘린더입니다. 반드시 본인 계정으로 로그인하세요.</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none">
+<header>
+  <div class="header-left">
+    <span class="school-badge">인천정각중학교</span>
+    <span class="header-title">생활안전부 <span>업무 캘린더</span></span>
+  </div>
+  <div class="header-right">
+    <div class="user-chip">
+      <div class="user-avatar" id="headerAvatar"></div>
+      <span class="user-name" id="headerName"></span>
+    </div>
+    <button class="today-btn" onclick="goToday()">오늘</button>
+    <button class="today-btn" onclick="refreshTasks()" id="refreshBtn" title="데이터 새로고침">🔄 새로고침</button>
+    <button class="add-task-btn" onclick="openAddModal()">+ 업무 등록</button>
+    <button class="logout-btn" onclick="doLogout()">로그아웃</button>
+  </div>
+</header>
+
+<div class="main">
+  <aside class="sidebar">
+    <div class="mini-calendar">
+      <div class="mini-cal-header">
+        <button class="mini-nav" onclick="miniNav(-1)">‹</button>
+        <span class="mini-cal-title" id="miniCalTitle"></span>
+        <button class="mini-nav" onclick="miniNav(1)">›</button>
+      </div>
+      <div class="mini-cal-grid" id="miniCalGrid"></div>
+    </div>
+    <div>
+      <div class="section-title">카테고리</div>
+      <div class="filter-chips" id="filterChips"></div>
+    </div>
+    <div>
+      <div class="section-title">이번 달 현황</div>
+      <div class="stats-grid">
+        <div class="stat-box"><span class="stat-num" id="totalCount">0</span><span class="stat-label">전체 업무</span></div>
+        <div class="stat-box"><span class="stat-num" id="doneCount" style="color:var(--green)">0</span><span class="stat-label">전체 완료</span></div>
+        <div class="stat-box"><span class="stat-num" id="myDoneCount" style="color:var(--blue)">0</span><span class="stat-label">내 완료</span></div>
+        <div class="stat-box"><span class="stat-num" id="overdueCount" style="color:var(--red)">0</span><span class="stat-label">기한 초과</span></div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="content">
+    <div class="cal-header">
+      <div class="cal-nav">
+        <button class="cal-nav-btn" onclick="changeMonth(-1)">‹</button>
+        <span class="cal-month-title" id="calMonthTitle"></span>
+        <button class="cal-nav-btn" onclick="changeMonth(1)">›</button>
+      </div>
+      <div class="view-tabs">
+        <button class="view-tab active" onclick="setView('month')">월간</button>
+        <button class="view-tab" onclick="setView('list')">목록</button>
+      </div>
+    </div>
+    <div class="month-grid-wrap" id="monthView">
+      <div class="month-grid">
+        <div class="day-labels">
+          <div class="day-label">SUN</div><div class="day-label">MON</div><div class="day-label">TUE</div>
+          <div class="day-label">WED</div><div class="day-label">THU</div><div class="day-label">FRI</div><div class="day-label">SAT</div>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+      </div>
+    </div>
+    <div class="list-view" id="listView"></div>
+  </main>
+</div>
+</div>
+
+<div id="syncBanner" style="display:none;background:#fff8e0;border-bottom:1px solid #f0d060;padding:9px 32px;font-size:13px;color:#7a5a00;font-weight:500;display:none;align-items:center;gap:8px;">
+  <span id="syncBannerMsg"></span>
+  <button onclick="document.getElementById('syncBanner').style.display='none'" style="margin-left:auto;background:none;border:none;cursor:pointer;font-size:16px;color:#7a5a00;">✕</button>
+</div>
+<div id="syncIndicator" style="display:none;position:fixed;top:72px;right:24px;background:var(--navy);color:#fff;padding:8px 16px;border-radius:20px;font-size:12px;font-weight:600;z-index:300;box-shadow:0 4px 16px rgba(0,0,0,.2);">
+  ⏳ 동기화 중...
+</div>
+<div class="modal-overlay" id="taskModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modalTitle">업무 등록</span>
+      <button class="modal-close" onclick="closeModal('taskModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">업무명 *</label>
+        <input type="text" class="form-input" id="taskTitle" placeholder="업무 제목을 입력하세요">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">날짜 *</label>
+          <input type="date" class="form-input" id="taskDate">
+        </div>
+        <div class="form-group">
+          <label class="form-label">카테고리</label>
+          <select class="form-select" id="taskCat">
+            <option>공문</option><option>회의</option><option>교육</option><option>학사일정</option><option>기타</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">담당 선생님 * (복수 선택 가능)</label>
+        <div class="teacher-checkboxes" id="teacherCheckboxes"></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">메모</label>
+        <textarea class="form-textarea" id="taskMemo" placeholder="업무 관련 메모를 입력하세요"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">색상</label>
+        <div class="color-picker" id="colorPicker"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeModal('taskModal')">취소</button>
+        <button class="btn-danger" id="deleteBtn" onclick="deleteTask()" style="display:none">삭제</button>
+        <button class="btn-primary" onclick="saveTask()">저장하기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">업무 상세</span>
+      <button class="modal-close" onclick="closeModal('detailModal')">✕</button>
+    </div>
+    <div class="modal-body" id="detailBody"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── DATA ──
+const COLORS = ['#1a4fa0','#d93a3a','#1c9c5e','#e8b400','#7c3aed','#ea7c1a','#0891b2','#db2777'];
+const CAT_COLORS = {공문:'#1a4fa0',회의:'#1c9c5e',교육:'#e8b400',학사일정:'#7c3aed',기타:'#6d7f9e'};
+
+// ★ Apps Script 웹 앱 URL을 여기에 붙여넣기
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxcVz-DDpIOvyAq0ws-j7TItKCespuEbCp-fyxwIJrdSPAqXdgagZVmqQuH3bODBd_U/exec';
+
+// ★ 선생님 목록과 비밀번호 설정
+const TEACHERS = [
+  {name:'조영아', pw:'1234', color:'#d93a3a'},
+  {name:'최현지', pw:'1234', color:'#FFBB00'},
+  {name:'권우형', pw:'1234', color:'#47C83E'},
+  {name:'강소이', pw:'1234', color:'#D9418C'},
+  {name:'김현규', pw:'1234', color:'#1a4fa0'},
+  {name:'김승욱', pw:'1234', color:'#7c3aed'},
+];
+
+// ── STATE ──
+let currentUser = null;
+let currentDate = new Date();
+let miniDate = new Date();
+let selectedFilter = 'all';
+let currentView = 'month';
+let editingId = null;
+let selectedColor = COLORS[0];
+let selectedTeachers = [];
+let tasks = [];
+let isSyncing = false;
+
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
+
+// ── 구글 시트 연동 함수 ──
+async function loadTasks() {
+  if (!SCRIPT_URL || SCRIPT_URL.includes('★')) {
+    showBanner('⚠️ SCRIPT_URL을 설정해주세요. 지금은 로컬 임시 데이터를 사용합니다.', 'warn');
+    tasks = JSON.parse(localStorage.getItem('jkTasks_local') || '[]');
+    if (!tasks.length) tasks = getSampleTasks();
+    return;
+  }
+  showSyncIndicator(true);
+  try {
+    const res = await fetch(SCRIPT_URL + '?action=getTasks');
+    const data = await res.json();
+    tasks = Array.isArray(data) ? data : [];
+    localStorage.setItem('jkTasks_local', JSON.stringify(tasks)); // 오프라인 캐시
+  } catch(e) {
+    showBanner('⚠️ 서버 연결 실패 — 캐시 데이터를 표시합니다.', 'warn');
+    tasks = JSON.parse(localStorage.getItem('jkTasks_local') || '[]');
+    if (!tasks.length) tasks = getSampleTasks();
+  } finally {
+    showSyncIndicator(false);
+  }
+}
+
+async function saveTasks() {
+  localStorage.setItem('jkTasks_local', JSON.stringify(tasks)); // 즉시 로컬 저장
+  if (!SCRIPT_URL || SCRIPT_URL.includes('★')) return;
+  showSyncIndicator(true);
+  try {
+    await fetch(SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify({action: 'saveTasks', tasks}),
+    });
+  } catch(e) {
+    showBanner('⚠️ 저장 중 오류가 발생했습니다. 재시도해주세요.', 'error');
+  } finally {
+    showSyncIndicator(false);
+  }
+}
+
+function getSampleTasks() {
+  const now = new Date(), y = now.getFullYear(), m = now.getMonth();
+  const p = n => String(n).padStart(2,'0');
+  return [
+    {id:uid(),title:'학교폭력 예방교육 진행',date:`${y}-${p(m+1)}-${p(5)}`,teachers:['김안전','이생활'],cat:'공문',memo:'전교생 대상 1교시 진행',color:'#1a4fa0',checks:{'김안전':true,'이생활':false}},
+    {id:uid(),title:'소화기 점검 및 교체',date:`${y}-${p(m+1)}-${p(10)}`,teachers:['이생활'],cat:'회의',memo:'본관 3층 소화기 2개 교체',color:'#1c9c5e',checks:{}},
+    {id:uid(),title:'안전점검의 날 행사',date:`${y}-${p(m+1)}-${p(15)}`,teachers:['박지도','정부장','김안전'],cat:'교육',memo:'전교사 참여 / 운동장 집합',color:'#e8b400',checks:{}},
+    {id:uid(),title:'생활안전 가정통신문 발송',date:`${y}-${p(m+1)}-${p(18)}`,teachers:['최현장'],cat:'학사일정',memo:'학부모 동의서 수거 포함',color:'#7c3aed',checks:{}},
+    {id:uid(),title:'교통안전교육 (1학년)',date:`${y}-${p(m+1)}-${p(22)}`,teachers:['김안전','박지도'],cat:'공문',memo:'강사 섭외 완료',color:'#1a4fa0',checks:{'김안전':true}},
+    {id:uid(),title:'비상대피 훈련',date:`${y}-${p(m+1)}-${p(25)}`,teachers:['정부장','이생활','최현장'],cat:'교육',memo:'소방서 협조 요청',color:'#e8b400',checks:{}},
+  ];
+}
+function pad(n){return String(n).padStart(2,'0');}
+function dateStr(d){return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;}
+function tInfo(name){return TEACHERS.find(t=>t.name===name)||{name,color:'#999'};}
+function ini(name){return (name||'?').slice(0,1);}
+
+function isAllDone(t){
+  if(!t.teachers||!t.teachers.length)return false;
+  return t.teachers.every(n=>t.checks&&t.checks[n]);
+}
+function doneCnt(t){if(!t.checks)return 0;return (t.teachers||[]).filter(n=>t.checks[n]).length;}
+function donePct(t){if(!t.teachers||!t.teachers.length)return 0;return Math.round(doneCnt(t)/t.teachers.length*100);}
+
+// ── LOGIN ──
+function initLogin(){
+  const sel=document.getElementById('loginName');
+  sel.innerHTML='<option value="">선택하세요</option>';
+  TEACHERS.forEach(t=>{const o=document.createElement('option');o.value=t.name;o.textContent=t.name;sel.appendChild(o);});
+}
+function doLogin(){
+  const name=document.getElementById('loginName').value;
+  const pw=document.getElementById('loginPw').value;
+  const err=document.getElementById('loginErr');
+  if(!name){err.style.display='block';err.textContent='선생님을 선택해주세요.';return;}
+  const teacher=TEACHERS.find(t=>t.name===name);
+  if(!teacher||teacher.pw!==pw){err.style.display='block';err.textContent='비밀번호가 올바르지 않습니다.';return;}
+  err.style.display='none';
+  currentUser=teacher;
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('app').style.display='block';
+  const av=document.getElementById('headerAvatar');
+  av.textContent=ini(teacher.name);av.style.background=teacher.color;av.style.color='#fff';
+  document.getElementById('headerName').textContent=teacher.name+' 선생님';
+  loadTasks().then(()=>render());
+}
+function doLogout(){
+  currentUser=null;
+  document.getElementById('loginPw').value='';
+  document.getElementById('loginName').value='';
+  document.getElementById('app').style.display='none';
+  document.getElementById('loginScreen').style.display='flex';
+}
+
+// ── RENDER ──
+function render(){
+  renderMiniCal();renderMainCal();renderFilters();renderStats();
+  if(currentView==='list')renderListView();
+}
+
+function renderMiniCal(){
+  const y=miniDate.getFullYear(),m=miniDate.getMonth();
+  document.getElementById('miniCalTitle').textContent=`${y}년 ${m+1}월`;
+  const grid=document.getElementById('miniCalGrid');grid.innerHTML='';
+  ['일','월','화','수','목','금','토'].forEach(d=>{const el=document.createElement('div');el.className='mini-day-label';el.textContent=d;grid.appendChild(el);});
+  const first=new Date(y,m,1).getDay(),last=new Date(y,m+1,0).getDate(),ts=dateStr(new Date());
+  const add=(dt,other)=>{
+    const el=document.createElement('div');el.className='mini-day';el.textContent=dt.getDate();
+    if(other)el.classList.add('other-month');
+    const ds=dateStr(dt);
+    if(ds===ts)el.classList.add('today');
+    if(ds===dateStr(currentDate))el.classList.add('selected');
+    if(tasks.some(t=>t.date===ds))el.classList.add('has-task');
+    el.onclick=()=>{currentDate=new Date(dt);miniDate=new Date(dt);render();};
+    grid.appendChild(el);
+  };
+  for(let i=0;i<first;i++)add(new Date(y,m,-first+i+1),true);
+  for(let d=1;d<=last;d++)add(new Date(y,m,d),false);
+  for(let d=1;d<=42-first-last;d++)add(new Date(y,m+1,d),true);
+}
+function miniNav(dir){miniDate=new Date(miniDate.getFullYear(),miniDate.getMonth()+dir,1);render();}
+function changeMonth(dir){currentDate=new Date(currentDate.getFullYear(),currentDate.getMonth()+dir,1);miniDate=new Date(currentDate);render();}
+function goToday(){currentDate=new Date();miniDate=new Date();render();}
+function getFiltered(){return selectedFilter==='all'?tasks:tasks.filter(t=>t.cat===selectedFilter);}
+
+function renderMainCal(){
+  const y=currentDate.getFullYear(),m=currentDate.getMonth();
+  document.getElementById('calMonthTitle').textContent=`${y}년 ${m+1}월`;
+  const grid=document.getElementById('calGrid');grid.innerHTML='';
+  const first=new Date(y,m,1).getDay(),last=new Date(y,m+1,0).getDate(),ts=dateStr(new Date());
+  const cells=[];
+  for(let i=0;i<first;i++)cells.push(new Date(y,m,-first+i+1));
+  for(let d=1;d<=last;d++)cells.push(new Date(y,m,d));
+  for(let d=1;d<=42-cells.length;d++)cells.push(new Date(y,m+1,d));
+  const filtered=getFiltered();
+  cells.forEach(dt=>{
+    const ds=dateStr(dt);
+    const cell=document.createElement('div');cell.className='cal-cell';
+    if(dt.getMonth()!==m)cell.classList.add('other-month');
+    if(ds===ts)cell.classList.add('today');
+    const dEl=document.createElement('div');dEl.className='cell-date';
+    if(dt.getDay()===0)dEl.classList.add('sunday');if(dt.getDay()===6)dEl.classList.add('saturday');
+    dEl.textContent=dt.getDate();cell.appendChild(dEl);
+    const dayTasks=filtered.filter(t=>t.date===ds);
+    dayTasks.slice(0,3).forEach(t=>{
+      const pct=donePct(t),done=isAllDone(t);
+      const pill=document.createElement('div');
+      pill.className='task-pill'+(done?' all-done':'');
+      pill.style.background=hexRgba(t.color,.15);pill.style.color=t.color;
+      pill.innerHTML=`<span class="task-dot" style="background:${t.color}"></span>${t.title}<span class="pill-prog" style="width:${pct}%"></span>`;
+      pill.onclick=e=>{e.stopPropagation();openDetail(t.id);};
+      cell.appendChild(pill);
+    });
+    if(dayTasks.length>3){const m2=document.createElement('div');m2.className='more-tasks';m2.textContent=`+${dayTasks.length-3}개 더`;cell.appendChild(m2);}
+    cell.onclick=()=>{currentDate=new Date(dt);render();};
+    grid.appendChild(cell);
+  });
+}
+
+function renderListView(){
+  const y=currentDate.getFullYear(),m=currentDate.getMonth();
+  const filtered=getFiltered().filter(t=>{const d=new Date(t.date);return d.getFullYear()===y&&d.getMonth()===m;});
+  filtered.sort((a,b)=>a.date.localeCompare(b.date));
+  const view=document.getElementById('listView');view.innerHTML='';
+  if(!filtered.length){view.innerHTML='<div style="text-align:center;padding:60px;color:var(--gray-4);font-size:15px">등록된 업무가 없습니다</div>';return;}
+  const grouped={};
+  filtered.forEach(t=>{const d=new Date(t.date);const k=`${d.getMonth()+1}월 ${d.getDate()}일 (${['일','월','화','수','목','금','토'][d.getDay()]})`;(grouped[k]=grouped[k]||[]).push(t);});
+  Object.entries(grouped).forEach(([k,ts])=>{
+    const g=document.createElement('div');g.className='list-group';
+    g.innerHTML=`<div class="list-group-title">${k}</div>`;
+    ts.forEach(t=>{
+      const pct=donePct(t),dc=doneCnt(t),total=(t.teachers||[]).length;
+      const avs=(t.teachers||[]).map(n=>{const ti=tInfo(n);const ck=t.checks&&t.checks[n];return `<div class="mini-av ${ck?'checked':'unchecked'}" style="background:${ti.color};color:#fff" title="${n} ${ck?'(완료)':'(미완료)'}">${ini(n)}</div>`;}).join('');
+      const pClass=pct===100?'full':(pct>0?'part':'zero');
+      const el=document.createElement('div');el.className='list-task'+(isAllDone(t)?' all-done':'');
+      el.innerHTML=`
+        <div class="list-task-color" style="background:${t.color}"></div>
+        <div class="list-task-info">
+          <div class="list-task-title">${t.title}</div>
+          <div class="list-task-meta"><span>📂 ${t.cat}</span><span class="mini-avatars">${avs}</span></div>
+        </div>
+        <div class="list-pct ${pClass}">${dc}/${total}</div>`;
+      el.onclick=()=>openDetail(t.id);g.appendChild(el);
+    });
+    view.appendChild(g);
+  });
+}
+
+function renderFilters(){
+  const cats=['공문','회의','교육','학사일정','기타'];
+  const fc=document.getElementById('filterChips');fc.innerHTML='';
+  const mkChip=(label,cat,color)=>{
+    const el=document.createElement('div');el.className='filter-chip'+(selectedFilter===cat?' active':'');
+    el.onclick=()=>setFilter(cat);
+    el.innerHTML=`<div class="chip-dot" style="background:${color}"></div>${label}`;fc.appendChild(el);
+  };
+  mkChip('전체 보기','all','#6d7f9e');
+  cats.forEach(c=>mkChip(c,c,CAT_COLORS[c]||'#999'));
+}
+
+function renderStats(){
+  const y=currentDate.getFullYear(),m=currentDate.getMonth();
+  const month=tasks.filter(t=>{const d=new Date(t.date);return d.getFullYear()===y&&d.getMonth()===m;});
+  const today=new Date();today.setHours(0,0,0,0);
+  const myDone=month.filter(t=>(t.teachers||[]).includes(currentUser?.name)&&t.checks&&t.checks[currentUser?.name]).length;
+  document.getElementById('totalCount').textContent=month.length;
+  document.getElementById('doneCount').textContent=month.filter(t=>isAllDone(t)).length;
+  document.getElementById('myDoneCount').textContent=myDone;
+  document.getElementById('overdueCount').textContent=month.filter(t=>!isAllDone(t)&&new Date(t.date)<today).length;
+}
+
+function setFilter(cat){selectedFilter=cat;render();}
+function setView(v){
+  currentView=v;
+  document.querySelectorAll('.view-tab').forEach((b,i)=>b.classList.toggle('active',['month','list'][i]===v));
+  document.getElementById('monthView').classList.toggle('hidden',v==='list');
+  document.getElementById('listView').classList.toggle('active',v==='list');
+  if(v==='list')renderListView();
+}
+
+// ── TASK MODAL ──
+function renderTeacherBoxes(sel=[]){
+  const wrap=document.getElementById('teacherCheckboxes');wrap.innerHTML='';
+  TEACHERS.forEach(t=>{
+    const on=sel.includes(t.name);
+    const el=document.createElement('div');el.className='teacher-check-item'+(on?' selected':'');
+    el.innerHTML=`<div class="teacher-check-avatar" style="background:${t.color};color:#fff">${ini(t.name)}</div><span class="teacher-check-name">${t.name}</span><div class="teacher-check-mark">${on?'✔':''}</div>`;
+    el.onclick=()=>{
+      if(selectedTeachers.includes(t.name))selectedTeachers=selectedTeachers.filter(x=>x!==t.name);
+      else selectedTeachers.push(t.name);
+      renderTeacherBoxes(selectedTeachers);
+    };
+    wrap.appendChild(el);
+  });
+}
+function renderColorPicker(){
+  const cp=document.getElementById('colorPicker');cp.innerHTML='';
+  COLORS.forEach(c=>{const el=document.createElement('div');el.className='color-opt'+(c===selectedColor?' selected':'');el.style.background=c;el.onclick=()=>{selectedColor=c;renderColorPicker();};cp.appendChild(el);});
+}
+function openAddModal(){
+  editingId=null;selectedTeachers=[];selectedColor=COLORS[0];
+  document.getElementById('modalTitle').textContent='업무 등록';
+  document.getElementById('deleteBtn').style.display='none';
+  document.getElementById('taskTitle').value='';
+  document.getElementById('taskDate').value=dateStr(currentDate);
+  document.getElementById('taskCat').value='공문';
+  document.getElementById('taskMemo').value='';
+  renderTeacherBoxes([]);renderColorPicker();openModal('taskModal');
+}
+function openEditModal(id){
+  const t=tasks.find(x=>x.id===id);if(!t)return;
+  editingId=id;selectedTeachers=[...(t.teachers||[])];selectedColor=t.color;
+  document.getElementById('modalTitle').textContent='업무 수정';
+  document.getElementById('deleteBtn').style.display='block';
+  document.getElementById('taskTitle').value=t.title;
+  document.getElementById('taskDate').value=t.date;
+  document.getElementById('taskCat').value=t.cat;
+  document.getElementById('taskMemo').value=t.memo||'';
+  renderTeacherBoxes(selectedTeachers);renderColorPicker();
+  closeModal('detailModal');openModal('taskModal');
+}
+function saveTask(){
+  const title=document.getElementById('taskTitle').value.trim();
+  const date=document.getElementById('taskDate').value;
+  const cat=document.getElementById('taskCat').value;
+  const memo=document.getElementById('taskMemo').value.trim();
+  if(!title){showToast('업무명을 입력해주세요','error');return;}
+  if(!date){showToast('날짜를 선택해주세요','error');return;}
+  if(!selectedTeachers.length){showToast('담당 선생님을 1명 이상 선택해주세요','error');return;}
+  if(editingId){
+    const idx=tasks.findIndex(t=>t.id===editingId);
+    const old=tasks[idx];
+    const newChecks={};
+    selectedTeachers.forEach(n=>{if(old.checks&&old.checks[n])newChecks[n]=true;});
+    tasks[idx]={...old,title,date,cat,memo,color:selectedColor,teachers:selectedTeachers,checks:newChecks};
+    showToast('업무가 수정되었습니다 ✔','success');
+  } else {
+    tasks.push({id:uid(),title,date,cat,memo,color:selectedColor,teachers:selectedTeachers,checks:{}});
+    showToast('업무가 등록되었습니다 ✔','success');
+  }
+  saveTasks();closeModal('taskModal');render();
+}
+function deleteTask(){
+  if(!confirm('이 업무를 삭제하시겠습니까?'))return;
+  tasks=tasks.filter(t=>t.id!==editingId);
+  saveTasks();closeModal('taskModal');showToast('업무가 삭제되었습니다','error');render();
+}
+
+// ── DETAIL MODAL ──
+function openDetail(id){
+  const t=tasks.find(x=>x.id===id);if(!t)return;
+  const dt=new Date(t.date);
+  const dd=`${dt.getFullYear()}년 ${dt.getMonth()+1}월 ${dt.getDate()}일 (${['일','월','화','수','목','금','토'][dt.getDay()]})`;
+  const pct=donePct(t),dc=doneCnt(t),total=(t.teachers||[]).length;
+  const fillCls=pct===0?'zero':(pct===100?'':'partial');
+
+  const rows=(t.teachers||[]).map(name=>{
+    const ti=tInfo(name);
+    const ck=t.checks&&t.checks[name];
+    const isMe=currentUser&&currentUser.name===name;
+    let rowCls='assignee-row'+(ck?' is-done':'')+(isMe?' is-me':'');
+    const btn=isMe
+      ?`<button class="my-check-btn ${ck?'undo':'do'}" onclick="toggleCheck('${t.id}','${name}')">${ck?'↩ 취소':'✔ 완료'}</button>`
+      :(ck?`<span style="font-size:12px;color:var(--green);font-weight:600">✔ 완료됨</span>`:`<span style="font-size:12px;color:var(--gray-4)">대기 중</span>`);
+    return `<div class="${rowCls}">
+      <div class="assignee-avatar" style="background:${ti.color};color:#fff">${ini(name)}</div>
+      <div class="assignee-name">${name} 선생님${isMe?' <span style="font-size:11px;color:var(--blue);font-weight:700">(나)</span>':''}</div>
+      ${ck?`<span class="assignee-done-badge">✔ 완료</span>`:`<span class="assignee-pending-badge">미완료</span>`}
+      ${btn}
+    </div>`;
+  }).join('');
+
+  document.getElementById('detailBody').innerHTML=`
+    <div class="task-detail-header">
+      <div class="task-detail-color" style="background:${t.color}"></div>
+      <div class="task-detail-title">${t.title}</div>
+    </div>
+    <div class="progress-section">
+      <div class="progress-label">
+        <span class="progress-text">완료 현황</span>
+        <span class="progress-pct">${dc} / ${total}명 완료 (${pct}%)</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill ${fillCls}" style="width:${pct}%"></div></div>
+    </div>
+    <div class="detail-row">
+      <div class="detail-icon">📅</div>
+      <div><div class="detail-label">날짜</div><div class="detail-value">${dd}</div></div>
+    </div>
+    <div class="detail-row">
+      <div class="detail-icon">📂</div>
+      <div><div class="detail-label">카테고리</div><div class="detail-value">${t.cat}</div></div>
+    </div>
+    ${t.memo?`<div class="detail-row"><div class="detail-icon">📝</div><div><div class="detail-label">메모</div><div class="detail-value">${t.memo}</div></div></div>`:''}
+    <div class="detail-row" style="border-bottom:none;padding-top:14px">
+      <div class="detail-icon">👥</div>
+      <div style="flex:1">
+        <div class="detail-label" style="margin-bottom:10px">담당자별 완료 현황</div>
+        <div class="assignee-list">${rows}</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:20px">
+      <button class="btn-secondary" style="flex:1" onclick="openEditModal('${t.id}')">✏️ 수정</button>
+    </div>`;
+  openModal('detailModal');
+}
+
+function toggleCheck(taskId, name){
+  if(!currentUser||currentUser.name!==name)return;
+  const t=tasks.find(x=>x.id===taskId);if(!t)return;
+  if(!t.checks)t.checks={};
+  t.checks[name]=!t.checks[name];
+  saveTasks();
+  showToast(t.checks[name]?`✔ ${name} 선생님 완료 처리!`:'완료가 취소되었습니다','success');
+  openDetail(taskId);
+  render();
+}
+
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-overlay').forEach(el=>el.addEventListener('click',e=>{if(e.target===el)el.classList.remove('open');}));
+
+function hexRgba(hex,a){const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);return `rgba(${r},${g},${b},${a})`;}
+let toastT;
+function showToast(msg,type='success'){
+  const el=document.getElementById('toast');el.textContent=msg;
+  el.className=`toast ${type} show`;clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('show'),2800);
+}
+
+function showBanner(msg, type='warn'){
+  const b=document.getElementById('syncBanner');
+  b.style.display='flex';
+  document.getElementById('syncBannerMsg').textContent=msg;
+}
+function showSyncIndicator(on){
+  document.getElementById('syncIndicator').style.display=on?'block':'none';
+}
+async function refreshTasks(){
+  await loadTasks();
+  render();
+  showToast('✔ 최신 데이터로 업데이트됐습니다','success');
+}
+
+// ── INIT ──
+initLogin();
+</script>
+</body>
+</html>
